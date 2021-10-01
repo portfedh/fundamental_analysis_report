@@ -1,0 +1,19 @@
+# Libraries used:
+requests==2.26.0
+dataframe_image==0.1.1
+pandas==1.3.2
+fpdf2==2.4.3
+fpdf==1.7.2
+plotly==5.1.0
+Pillow==8.3.2
+
+# You must add the following folder structure
+# In the same path as your Jupyter Notebook Script:
+
+-Fundamental_analysis.ipynb
+-images
+    -input
+        -BS-Logo.png
+    -output
+
+
