@@ -1,40 +1,6 @@
 # List
 
 list = [
-    'MPWR',
-    'CZR',
-    'ULTA',
-    'QRVO',
-    'FE',
-    'EXPD',
-    'DLTR',
-    'STE',
-    'VTR',
-    'CLX',
-    'PKI',
-    'IR',
-    'CHD',
-    'EXPE',
-    'KMX',
-    'ANET',
-    'HOLX',
-    'TER',
-    'HPE',
-    'DPZ',
-    'BR',
-    'DGX',
-    'POOL',
-    'AMCR',
-    'NTAP',
-]
-
-list_failed = ['TRMB', 'TSCO']
-
-list_to_check = [
-    'TYL',
-    'KEY',
-    'DRI',
-    'DRE',
     'RF',
     'TECH',
     'PEAK',
@@ -55,6 +21,11 @@ list_to_check = [
     'MTB',
     'LB',
     'CE',
+]
+
+list_failed = ['TRMB', 'TSCO', "QRVO"]
+
+list_to_check = [
     'HAL',
     'VTRS',
     'GPC',
@@ -514,6 +485,35 @@ list_done = [
     'ESS',
     'MKC',
     'VRSN',
+    'MPWR',
+    'CZR',
+    'ULTA',
+    'QRVO',
+    'FE',
+    'EXPD',
+    'DLTR',
+    'STE',
+    'VTR',
+    'CLX',
+    'PKI',
+    'IR',
+    'CHD',
+    'EXPE',
+    'KMX',
+    'ANET',
+    'HOLX',
+    'TER',
+    'HPE',
+    'DPZ',
+    'BR',
+    'DGX',
+    'POOL',
+    'AMCR',
+    'NTAP',
+    'TYL',
+    'KEY',
+    'DRI',
+    'DRE',
 ]
 
 if __name__ == "__main__":

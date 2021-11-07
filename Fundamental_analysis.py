@@ -52,24 +52,28 @@ for ticker in imported_list:
 
     # FMP API Key
     # api = os.environ.get("token_finmodelprep")
-    # api = os.environ.get("token_finmodelprep2")
-    api = os.environ.get("token_finmodelprep3")
+    api = os.environ.get("token_finmodelprep2")
+    # api = os.environ.get("token_finmodelprep3")
 
-    website = 'https://financialmodelingprep.com/api/v3'
+    www = 'https://financialmodelingprep.com/api/v3'
+    is_www = '/income-statement/'
+    bs_www = '/balance-sheet-statement/'
+    cf_www = '/cash-flow-statement/'
+    r_www = '/ratios/'
+    km_www = '/key-metrics/'
+    p_www = '/profile/'
+    rtg_www = '/rating/'
+    es_www = '/earnings-surprises/'
 
     # Data to Import
-    IS = requests.get(f'{website}/income-statement/{company}?apikey={api}').json()
-    BS = requests.get(
-        f'{website}/balance-sheet-statement/{company}?apikey={api}'
-    ).json()
-    CF = requests.get(f'{website}/cash-flow-statement/{company}?apikey={api}').json()
-    Ratios = requests.get(f'{website}/ratios/{company}?apikey={api}').json()
-    Metrics = requests.get(f'{website}/key-metrics/{company}?apikey={api}').json()
-    Profile = requests.get(f'{website}/profile/{company}?apikey={api}').json()
-    Raiting = requests.get(f'{website}/rating/{company}?apikey={api}').json()
-    Surprises = requests.get(
-        f'{website}/earnings-surprises/{company}?apikey={api}'
-    ).json()
+    IS = requests.get(f'{www}{is_www}{company}?apikey={api}').json()
+    BS = requests.get(f'{www}{bs_www}{company}?apikey={api}').json()
+    CF = requests.get(f'{www}{cf_www}{company}?apikey={api}').json()
+    Ratios = requests.get(f'{www}{r_www}{company}?apikey={api}').json()
+    Metrics = requests.get(f'{www}{km_www}{company}?apikey={api}').json()
+    Profile = requests.get(f'{www}{p_www}{company}?apikey={api}').json()
+    Raiting = requests.get(f'{www}{rtg_www}{company}?apikey={api}').json()
+    Surprises = requests.get(f'{www}{es_www}{company}?apikey={api}').json()
 
     # Download Company Image
     imageurl = Profile[0]['image']
@@ -436,7 +440,8 @@ for ticker in imported_list:
         title=str('Balance Sheet for: ' + company_name),
         xaxis_title='Year',
         yaxis_title='Amount $mm USD',
-        legend=dict(orientation="h", yanchor="bottom", y=1.0, xanchor="right", x=1),
+        legend=dict(orientation="h", yanchor="bottom",
+                    y=1.0, xanchor="right", x=1),
         width=800,
         height=400,
     )
@@ -486,7 +491,8 @@ for ticker in imported_list:
         title=str('Common Size Balance Sheet: ' + company_name),
         xaxis_title='Year',
         yaxis_title='Percent %',
-        legend=dict(orientation="h", yanchor="bottom", y=1.0, xanchor="right", x=1),
+        legend=dict(orientation="h", yanchor="bottom",
+                    y=1.0, xanchor="right", x=1),
         width=800,
         height=400,
     )
@@ -532,7 +538,8 @@ for ticker in imported_list:
         title=str('Income Statement for: ' + company_name),
         xaxis_title='Year',
         yaxis_title='Percent %',
-        legend=dict(orientation="h", yanchor="bottom", y=1.0, xanchor="right", x=1),
+        legend=dict(orientation="h", yanchor="bottom",
+                    y=1.0, xanchor="right", x=1),
         width=800,
         height=400,
     )
@@ -578,7 +585,8 @@ for ticker in imported_list:
         title=str('Common Size Income Statement for: ' + company_name),
         xaxis_title='Year',
         yaxis_title='Percent %',
-        legend=dict(orientation="h", yanchor="bottom", y=1.0, xanchor="right", x=1),
+        legend=dict(orientation="h", yanchor="bottom",
+                    y=1.0, xanchor="right", x=1),
         width=800,
         height=400,
     )
@@ -621,7 +629,8 @@ for ticker in imported_list:
         title=str('Cash Flow Statement for: ' + company_name),
         xaxis_title='Year',
         yaxis_title='Amount $',
-        legend=dict(orientation="h", yanchor="bottom", y=1.0, xanchor="right", x=1),
+        legend=dict(orientation="h", yanchor="bottom",
+                    y=1.0, xanchor="right", x=1),
         width=800,
         height=400,
     )
@@ -678,11 +687,13 @@ for ticker in imported_list:
     fig.update_layout(
         barmode='group',  # group or stack
         title=str(
-            'Equity Uses: Distribution, Investment or Debt Payment: ' + company_name
+            'Equity Uses: Distribution, Investment or Debt Payment: '
+            + company_name
         ),
         xaxis_title='Year',
         yaxis_title='Amount $',
-        legend=dict(orientation="h", yanchor="bottom", y=1.0, xanchor="right", x=1),
+        legend=dict(orientation="h", yanchor="bottom",
+                    y=1.0, xanchor="right", x=1),
         width=800,
         height=400,
     )
@@ -694,7 +705,9 @@ for ticker in imported_list:
     fig.write_image("images/output/equity_uses.png", scale=2)
 
     # Check the values in the dataframe vs the graph
-    graph_df[["Date", "LY_Equity", "Net Income", "Dividends Paid", "SH Equity"]]
+    graph_df[["Date", "LY_Equity",
+              "Net Income", "Dividends Paid",
+              "SH Equity"]]
 
     # Extracting variable information we will use later
     company_symbol = profile_df.at[0, 'symbol']
@@ -775,7 +788,8 @@ for ticker in imported_list:
     table_is_df = table_is_df.transpose()
 
     # Save the data as an image:
-    table_is_df.dfi.export('images/output/is_table.png', table_conversion='matplotlib')
+    dfi.export(table_is_df, 'images/output/is_table.png',
+               table_conversion='matplotlib')
 
     # Print table name
     print("Income Statement")
@@ -818,9 +832,8 @@ for ticker in imported_list:
     table_cs_is_df = table_cs_is_df.transpose()
 
     # Save the data as an image:
-    table_cs_is_df.dfi.export(
-        'images/output/cs_is_table.png', table_conversion='matplotlib'
-    )
+    dfi.export(table_cs_is_df, 'images/output/cs_is_table.png',
+               table_conversion='matplotlib')
 
     # Balance Sheet Dataframe
     # Creating a new dataframe for the PDF Table Output
@@ -884,7 +897,8 @@ for ticker in imported_list:
     table_bs_df = table_bs_df.transpose()
 
     # Save the data as an image:
-    table_bs_df.dfi.export('images/output/bs_table.png', table_conversion='matplotlib')
+    dfi.export(table_bs_df, 'images/output/bs_table.png',
+               table_conversion='matplotlib')
 
     # Common Size Balance Sheet Dataframe
     # Creating a new dataframe for the PDF Table Output
@@ -918,9 +932,8 @@ for ticker in imported_list:
     table_cs_bs_df = table_cs_bs_df.transpose()
 
     # Save the data as an image:
-    table_cs_bs_df.dfi.export(
-        'images/output/cs_bs_table.png', table_conversion='matplotlib'
-    )
+    dfi.export(table_cs_bs_df, 'images/output/cs_bs_table.png',
+               table_conversion='matplotlib')
 
     # Print table name
     print("Common Size Balance Sheet")
@@ -964,7 +977,8 @@ for ticker in imported_list:
 
     # Add change in cash column
     table_cf_df['Change in Cash'] = (
-        table_cf_df['cashAtEndOfPeriod'] - table_cf_df['cashAtBeginningOfPeriod']
+        table_cf_df['cashAtEndOfPeriod']
+        - table_cf_df['cashAtBeginningOfPeriod']
     )
 
     # Sort descending
@@ -994,7 +1008,8 @@ for ticker in imported_list:
     table_cf_df = table_cf_df.transpose()
 
     # Save the data as an image:
-    table_cf_df.dfi.export('images/output/cf_table.png', table_conversion='matplotlib')
+    dfi.export(table_cf_df, 'images/output/cf_table.png',
+               table_conversion='matplotlib')
 
     # Print table name
     print("Cash Flow Statement")
@@ -1007,7 +1022,9 @@ for ticker in imported_list:
 
     # Filter the fundamentals_metrics_df
     fundamentals_metrics_filtered_df = pd.DataFrame(
-        fundamentals_metrics_df, columns=['Mkt Cap', 'Debt to Assets', 'Debt to Equity']
+        fundamentals_metrics_df, columns=['Mkt Cap',
+                                          'Debt to Assets',
+                                          'Debt to Equity']
     )
 
     # Filted the fundamentals_ratios_df
@@ -1117,9 +1134,8 @@ for ticker in imported_list:
     table_metrics_df = table_metrics_df.transpose()
 
     # Save the data as an image:
-    table_metrics_df.dfi.export(
-        'images/output/main_metrics_table.png', table_conversion='matplotlib'
-    )
+    dfi.export(table_metrics_df, 'images/output/main_metrics_table.png',
+               table_conversion='matplotlib')
 
     # Print Table Name
     print("Main Metrics")
@@ -1261,7 +1277,8 @@ for ticker in imported_list:
     pdf.ln(10)
     pdf.cell(14)
     pdf.set_font('Helvetica', 'B', 11)
-    pdf.cell(w=50, h=5, txt="Company Summary:", border=border_chg, ln=1, align='L')
+    pdf.cell(w=50, h=5, txt="Company Summary:",
+             border=border_chg, ln=1, align='L')
     pdf.ln(3)
 
     # Company summary table
@@ -1285,7 +1302,8 @@ for ticker in imported_list:
     # Company description
     pdf.cell(14)
     pdf.multi_cell(
-        w=165, h=5, txt=company_description, border=border_chg, align='J', fill=False
+        w=165, h=5, txt=company_description,
+        border=border_chg, align='J', fill=False
     )
 
     # Company image
@@ -1300,7 +1318,8 @@ for ticker in imported_list:
     # Title
     pdf.set_font('Helvetica', 'B', 11)
     pdf.ln(10)
-    pdf.cell(w=45, h=5, txt=" Financial Summary:", border=border_chg, ln=1, align='L')
+    pdf.cell(w=45, h=5, txt=" Financial Summary:",
+             border=border_chg, ln=1, align='L')
 
     # Amount in Millions
     pdf.cell(10)
@@ -1326,7 +1345,8 @@ for ticker in imported_list:
     pdf.set_font('Helvetica', 'B', 11)
     pdf.ln(10)
     pdf.cell(
-        w=45, h=5, txt=" Financial statements:", border=border_chg, ln=1, align='L'
+        w=45, h=5, txt=" Financial statements:",
+        border=border_chg, ln=1, align='L'
     )
 
     # Amount in Millions
@@ -1428,4 +1448,6 @@ for ticker in imported_list:
     pdf.image('images/output/equity_uses.png', x=30, y=175, h=80)
 
     # Save output as PDF
-    pdf.output(company_symbol + " " + today.strftime("%Y-%m-%d") + ".pdf")
+    pdf.output(
+        'files/'+company_symbol + " " + today.strftime("%Y-%m-%d") + ".pdf"
+        )
