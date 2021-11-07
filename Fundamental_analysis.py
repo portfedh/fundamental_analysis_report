@@ -23,21 +23,21 @@ for ticker in imported_list:
 
     # Remove previous files
     paths = (
-        "images/output/bs.png",
-        "images/output/cs_bs.png",
-        "images/output/is.png",
-        "images/output/cs_is.png",
-        "images/output/equity_uses.png",
-        "images/output/cash_flow.png",
-        "images/output/cs_is_table.png",
-        "images/output/cash_flow.png",
-        "images/output/is_table.png",
-        "images/output/bs_table.png",
-        "images/output/cs_bs_table.png",
-        "images/output/cf_table.png",
-        "images/output/main_metrics_table.png",
-        "images/output/company_image.png",
-    )
+             "images/output/bs.png",
+             "images/output/cs_bs.png",
+             "images/output/is.png",
+             "images/output/cs_is.png",
+             "images/output/equity_uses.png",
+             "images/output/cash_flow.png",
+             "images/output/cs_is_table.png",
+             "images/output/cash_flow.png",
+             "images/output/is_table.png",
+             "images/output/bs_table.png",
+             "images/output/cs_bs_table.png",
+             "images/output/cf_table.png",
+             "images/output/main_metrics_table.png",
+             "images/output/company_image.png",
+             )
 
     for path in paths:
         if os.path.exists(path):
@@ -51,8 +51,8 @@ for ticker in imported_list:
     # https://financialmodelingprep.com/developer/docs/
 
     # FMP API Key
-    # api = os.environ.get("token_finmodelprep")
-    api = os.environ.get("token_finmodelprep2")
+    api = os.environ.get("token_finmodelprep")
+    # api = os.environ.get("token_finmodelprep2")
     # api = os.environ.get("token_finmodelprep3")
 
     www = 'https://financialmodelingprep.com/api/v3'
@@ -97,32 +97,24 @@ for ticker in imported_list:
     company_name = profile_df.at[0, 'companyName']
 
     # Variables used by all dataframes:
-
     millions = 1_000_000
     # To divide raw data by 1 million to make it easier to read.
-
     financials = {}
     # Used as for loop output
-
     dates = [2020, 2019, 2018, 2017, 2016]
     # Keep in descending order to match data
-
     isempty_fs = is_df.empty or bs_df.empty or cf_df.empty
     # To check data for fundamentals_financials_df
-
     isempty_metrics = metrics_df.empty
     # To check data for fundamentals_metrics_df
-
     isempty_ratios = ratios_df.empty
     # To check data for fundamentals_metrics_df
 
     # fundamentals_financials_df
-
     if isempty_fs is True:
         print("Dataframe is empty")
 
         for item in range(5):  # Try Len(is_df) alternative
-
             financials[dates[item]] = {}
 
             # Income Statement Get
@@ -160,10 +152,8 @@ for ticker in imported_list:
             financials[dates[item]]['cashAtEndOfPeriod'] = 99
 
     else:
-        print("Dataframe is not empty")
-
+        print("Neither IS, BS or CF Dataframes are empty")
         for item in range(5):
-
             financials[dates[item]] = {}
 
             # Income Statement Get
@@ -173,8 +163,12 @@ for ticker in imported_list:
             financials[dates[item]]['WA ShsOutDil'] = (
                 IS[item]['weightedAverageShsOutDil'] / millions
             )
-            financials[dates[item]]['Revenue'] = IS[item]['revenue'] / millions
-            financials[dates[item]]['Gross Profit'] = IS[item]['grossProfit'] / millions
+            financials[dates[item]]['Revenue'] = (
+                IS[item]['revenue'] / millions
+            )
+            financials[dates[item]]['Gross Profit'] = (
+                IS[item]['grossProfit'] / millions
+            )
             financials[dates[item]]['R&D Expenses'] = (
                 IS[item]['researchAndDevelopmentExpenses'] / millions
             )
@@ -184,7 +178,9 @@ for ticker in imported_list:
             financials[dates[item]]['Op Income'] = (
                 IS[item]['operatingIncome'] / millions
             )
-            financials[dates[item]]['Net Income'] = IS[item]['netIncome'] / millions
+            financials[dates[item]]['Net Income'] = (
+                IS[item]['netIncome'] / millions
+            )
             financials[dates[item]]['EPS'] = IS[item]['eps']
             financials[dates[item]]['Interest Expense'] = (
                 IS[item]['interestExpense'] / millions
@@ -203,7 +199,9 @@ for ticker in imported_list:
             financials[dates[item]]['GW_&_IntAssets'] = (
                 BS[item]['goodwillAndIntangibleAssets'] / millions
             )
-            financials[dates[item]]['Total Assets'] = BS[item]['totalAssets'] / millions
+            financials[dates[item]]['Total Assets'] = (
+                BS[item]['totalAssets'] / millions
+            )
             financials[dates[item]]['Cur Liab'] = (
                 BS[item]['totalCurrentLiabilities'] / millions
             )
@@ -227,8 +225,12 @@ for ticker in imported_list:
             financials[dates[item]]['CF Financing'] = (
                 CF[item]['netCashUsedProvidedByFinancingActivities'] / millions
             )
-            financials[dates[item]]['CAPEX'] = CF[item]['capitalExpenditure'] / millions
-            financials[dates[item]]['FCF'] = CF[item]['freeCashFlow'] / millions
+            financials[dates[item]]['CAPEX'] = (
+                CF[item]['capitalExpenditure'] / millions
+            )
+            financials[dates[item]]['FCF'] = (
+                CF[item]['freeCashFlow'] / millions
+            )
             financials[dates[item]]['Dividends Paid'] = (
                 CF[item]['dividendsPaid'] / millions
             )
@@ -240,19 +242,17 @@ for ticker in imported_list:
             )
 
     # Transform the output dictionary into a Pandas Dataframe:
-    # Orientation can be "index" or "columns".
-    fundamentals_financials_df = pd.DataFrame.from_dict(financials, orient='index')
+    #     Orientation can be "index" or "columns".
+    fundamentals_financials_df = pd.DataFrame.from_dict(financials,
+                                                        orient='index')
     fundamentals_financials_df.index.name = 'Date'
 
     # fundamentals_metrics_df
-
     if isempty_metrics is True:
         print("Dataframe is empty")
 
         for item in range(5):
-
             financials[dates[item]] = {}
-
             # Key Metrics Get
             financials[dates[item]]['Mkt Cap'] = 99
             financials[dates[item]]['Debt to Assets'] = 99
@@ -262,36 +262,37 @@ for ticker in imported_list:
 
     else:
         print("Dataframe is not empty")
-
         for item in range(5):
-
             financials[dates[item]] = {}
-
             # Key Metrics Get
-            financials[dates[item]]['Mkt Cap'] = Metrics[item]['marketCap'] / millions
-            financials[dates[item]]['Debt to Assets'] = Metrics[item]['debtToAssets']
-            financials[dates[item]]['Debt to Equity'] = Metrics[item]['debtToEquity']
-            financials[dates[item]]['Revenue per Share'] = Metrics[item][
-                'revenuePerShare'
-            ]
-            financials[dates[item]]['Net Income per Share'] = Metrics[item][
-                'netIncomePerShare'
-            ]
+            financials[dates[item]]['Mkt Cap'] = (
+                Metrics[item]['marketCap'] / millions
+            )
+            financials[dates[item]]['Debt to Assets'] = (
+                Metrics[item]['debtToAssets']
+            )
+            financials[dates[item]]['Debt to Equity'] = (
+                Metrics[item]['debtToEquity']
+            )
+            financials[dates[item]]['Revenue per Share'] = (
+                Metrics[item]['revenuePerShare']
+            )
+            financials[dates[item]]['Net Income per Share'] = (
+                Metrics[item]['netIncomePerShare']
+            )
 
     # Transform the output dictionary into a Pandas Dataframe:
-    # Orientation can be "index" or "columns"
-    fundamentals_metrics_df = pd.DataFrame.from_dict(financials, orient='index')
+    #     Orientation can be "index" or "columns"
+    fundamentals_metrics_df = pd.DataFrame.from_dict(financials,
+                                                     orient='index')
     fundamentals_metrics_df.index.name = 'Date'
 
     # fundamentals_ratios_df
-
     if isempty_ratios is True:
         print("Dataframe is empty")
 
         for item in range(5):
-
             financials[dates[item]] = {}
-
             # Ratios
             financials[dates[item]]['Gross Profit Margin'] = 99
             financials[dates[item]]['Op Margin'] = 99
@@ -313,44 +314,68 @@ for ticker in imported_list:
 
     else:
         print("Dataframe is not empty")
-
         for item in range(5):
-
             financials[dates[item]] = {}
-
             # Ratios
-            financials[dates[item]]['Gross Profit Margin'] = Ratios[item][
-                'grossProfitMargin'
-            ]
-            financials[dates[item]]['Op Margin'] = Ratios[item]['operatingProfitMargin']
-            financials[dates[item]]['Int Coverage'] = Ratios[item]['interestCoverage']
-            financials[dates[item]]['Net Profit Margin'] = Ratios[item][
-                'netProfitMargin'
-            ]
-            financials[dates[item]]['Dividend Yield'] = Ratios[item]['dividendYield']
-            financials[dates[item]]['Current Ratio'] = Ratios[item]['currentRatio']
-            financials[dates[item]]['Operating Cycle'] = Ratios[item]['operatingCycle']
-            financials[dates[item]]['Days of AP Outstanding'] = Ratios[item][
-                'daysOfPayablesOutstanding'
-            ]
-            financials[dates[item]]['Cash Conversion Cycle'] = Ratios[item][
-                'cashConversionCycle'
-            ]
-            financials[dates[item]]['ROA'] = Ratios[item]['returnOnAssets']
-            financials[dates[item]]['ROE'] = Ratios[item]['returnOnEquity']
-            financials[dates[item]]['ROCE'] = Ratios[item]['returnOnCapitalEmployed']
-            financials[dates[item]]['PE'] = Ratios[item]['priceEarningsRatio']
-            financials[dates[item]]['PS'] = Ratios[item]['priceToSalesRatio']
-            financials[dates[item]]['PB'] = Ratios[item]['priceToBookRatio']
-            financials[dates[item]]['PCF'] = Ratios[item]['priceToFreeCashFlowsRatio']
-            financials[dates[item]]['PEG'] = Ratios[item]['priceEarningsToGrowthRatio']
+            financials[dates[item]]['Gross Profit Margin'] = (
+                Ratios[item]['grossProfitMargin']
+            )
+            financials[dates[item]]['Op Margin'] = (
+                Ratios[item]['operatingProfitMargin']
+            )
+            financials[dates[item]]['Int Coverage'] = (
+                Ratios[item]['interestCoverage']
+            )
+            financials[dates[item]]['Net Profit Margin'] = (
+                Ratios[item]['netProfitMargin']
+            )
+            financials[dates[item]]['Dividend Yield'] = (
+                Ratios[item]['dividendYield']
+            )
+            financials[dates[item]]['Current Ratio'] = (
+                Ratios[item]['currentRatio']
+            )
+            financials[dates[item]]['Operating Cycle'] = (
+                Ratios[item]['operatingCycle']
+            )
+            financials[dates[item]]['Days of AP Outstanding'] = (
+                Ratios[item]['daysOfPayablesOutstanding']
+            )
+            financials[dates[item]]['Cash Conversion Cycle'] = (
+                Ratios[item]['cashConversionCycle']
+            )
+            financials[dates[item]]['ROA'] = (
+                Ratios[item]['returnOnAssets']
+            )
+            financials[dates[item]]['ROE'] = (
+                Ratios[item]['returnOnEquity']
+            )
+            financials[dates[item]]['ROCE'] = (
+                Ratios[item]['returnOnCapitalEmployed']
+            )
+            financials[dates[item]]['PE'] = (
+                Ratios[item]['priceEarningsRatio']
+            )
+            financials[dates[item]]['PS'] = (
+                Ratios[item]['priceToSalesRatio']
+            )
+            financials[dates[item]]['PB'] = (
+                Ratios[item]['priceToBookRatio']
+            )
+            financials[dates[item]]['PCF'] = (
+                Ratios[item]['priceToFreeCashFlowsRatio']
+            )
+            financials[dates[item]]['PEG'] = (
+                Ratios[item]['priceEarningsToGrowthRatio']
+            )
             financials[dates[item]]['EaringsYield'] = (
                 1 / Ratios[item]['priceEarningsRatio']
             )
 
     # Transform the output dictionary into a Pandas Dataframe:
     # Orientation can be "index" or "columns".
-    fundamentals_ratios_df = pd.DataFrame.from_dict(financials, orient='index')
+    fundamentals_ratios_df = pd.DataFrame.from_dict(financials,
+                                                    orient='index')
     fundamentals_ratios_df.index.name = 'Date'
 
     # Creating a Separate New Dataframe for the Graphs: graph_df
@@ -390,15 +415,23 @@ for ticker in imported_list:
     graph_df['Net_income_perc'] = round(
         ((graph_df['Net Income'] / graph_df['Revenue']) * 100), 0
     )
-    graph_df['FCF_perc'] = round(((graph_df['FCF'] / graph_df['Revenue']) * 100), 0)
+    graph_df['FCF_perc'] = round(
+        ((graph_df['FCF'] / graph_df['Revenue']) * 100), 0
+    )
     graph_df['Int_exp_perc'] = round(
         ((graph_df['Interest Expense'] / graph_df['Revenue']) * 100), 0
     )
 
     # Book value growth
-    graph_df['Book_Value'] = graph_df['SH Equity'] - graph_df['GW_&_IntAssets']
-    graph_df['LY_Book_Value'] = graph_df['Book_Value'].shift(1)
-    graph_df['LY_Equity'] = graph_df['SH Equity'].shift(1)
+    graph_df['Book_Value'] = (
+        graph_df['SH Equity'] - graph_df['GW_&_IntAssets']
+    )
+    graph_df['LY_Book_Value'] = (
+        graph_df['Book_Value'].shift(1)
+    )
+    graph_df['LY_Equity'] = (
+        graph_df['SH Equity'].shift(1)
+    )
 
     # [Graph] Balance Sheet total USD
     fig = go.Figure(
@@ -815,7 +848,8 @@ for ticker in imported_list:
     # Transform values to percentages
     for column_name in cs_is_columns:
         table_cs_is_df[column_name] = round(
-            ((table_cs_is_df[column_name] / table_cs_is_df['Revenue']) * 100), 0
+            ((table_cs_is_df[column_name] / table_cs_is_df['Revenue']) * 100),
+            0
         )
 
     # Transform percentages to string and format to include % sybol.
@@ -918,7 +952,8 @@ for ticker in imported_list:
     # Transform values to percentages
     for column_name in cs_bs_columns:
         table_cs_bs_df[column_name] = round(
-            ((table_cs_bs_df[column_name] / table_cs_bs_df['Total Assets']) * 100), 0
+            ((table_cs_bs_df[column_name]/table_cs_bs_df['Total Assets'])*100),
+            0
         )
 
     # Transform percentages to string and format as percentage
