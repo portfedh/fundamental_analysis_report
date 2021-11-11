@@ -51,9 +51,9 @@ for ticker in imported_list:
     # https://financialmodelingprep.com/developer/docs/
 
     # FMP API Key
-    api = os.environ.get("token_finmodelprep")
+    # api = os.environ.get("token_finmodelprep")
     # api = os.environ.get("token_finmodelprep2")
-    # api = os.environ.get("token_finmodelprep3")
+    api = os.environ.get("token_finmodelprep3")
 
     www = 'https://financialmodelingprep.com/api/v3'
     is_www = '/income-statement/'
@@ -570,7 +570,7 @@ for ticker in imported_list:
         barmode='group',  # group or stack
         title=str('Income Statement for: ' + company_name),
         xaxis_title='Year',
-        yaxis_title='Percent %',
+        yaxis_title='Amount $ mm USD',
         legend=dict(orientation="h", yanchor="bottom",
                     y=1.0, xanchor="right", x=1),
         width=800,
