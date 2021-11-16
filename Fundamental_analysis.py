@@ -23,21 +23,21 @@ for ticker in imported_list:
 
     # Remove previous files
     paths = (
-             "images/output/bs.png",
-             "images/output/cs_bs.png",
-             "images/output/is.png",
-             "images/output/cs_is.png",
-             "images/output/equity_uses.png",
-             "images/output/cash_flow.png",
-             "images/output/cs_is_table.png",
-             "images/output/cash_flow.png",
-             "images/output/is_table.png",
-             "images/output/bs_table.png",
-             "images/output/cs_bs_table.png",
-             "images/output/cf_table.png",
-             "images/output/main_metrics_table.png",
-             "images/output/company_image.png",
-             )
+        "images/output/bs.png",
+        "images/output/cs_bs.png",
+        "images/output/is.png",
+        "images/output/cs_is.png",
+        "images/output/equity_uses.png",
+        "images/output/cash_flow.png",
+        "images/output/cs_is_table.png",
+        "images/output/cash_flow.png",
+        "images/output/is_table.png",
+        "images/output/bs_table.png",
+        "images/output/cs_bs_table.png",
+        "images/output/cf_table.png",
+        "images/output/main_metrics_table.png",
+        "images/output/company_image.png",
+    )
 
     for path in paths:
         if os.path.exists(path):
@@ -52,8 +52,8 @@ for ticker in imported_list:
 
     # FMP API Key
     # api = os.environ.get("token_finmodelprep")
-    # api = os.environ.get("token_finmodelprep2")
-    api = os.environ.get("token_finmodelprep3")
+    api = os.environ.get("token_finmodelprep2")
+    # api = os.environ.get("token_finmodelprep3")
 
     www = 'https://financialmodelingprep.com/api/v3'
     is_www = '/income-statement/'
@@ -75,8 +75,9 @@ for ticker in imported_list:
     Raiting = requests.get(f'{www}{rtg_www}{company}?apikey={api}').json()
     Surprises = requests.get(f'{www}{es_www}{company}?apikey={api}').json()
 
-    # Download Company Image
+    # Download Company Image and Currency
     imageurl = Profile[0]['image']
+    currency = Profile[0]['currency']
 
     # Save the company image
     r = requests.get(str(imageurl))
@@ -163,12 +164,8 @@ for ticker in imported_list:
             financials[dates[item]]['WA ShsOutDil'] = (
                 IS[item]['weightedAverageShsOutDil'] / millions
             )
-            financials[dates[item]]['Revenue'] = (
-                IS[item]['revenue'] / millions
-            )
-            financials[dates[item]]['Gross Profit'] = (
-                IS[item]['grossProfit'] / millions
-            )
+            financials[dates[item]]['Revenue'] = IS[item]['revenue'] / millions
+            financials[dates[item]]['Gross Profit'] = IS[item]['grossProfit'] / millions
             financials[dates[item]]['R&D Expenses'] = (
                 IS[item]['researchAndDevelopmentExpenses'] / millions
             )
@@ -178,9 +175,7 @@ for ticker in imported_list:
             financials[dates[item]]['Op Income'] = (
                 IS[item]['operatingIncome'] / millions
             )
-            financials[dates[item]]['Net Income'] = (
-                IS[item]['netIncome'] / millions
-            )
+            financials[dates[item]]['Net Income'] = IS[item]['netIncome'] / millions
             financials[dates[item]]['EPS'] = IS[item]['eps']
             financials[dates[item]]['Interest Expense'] = (
                 IS[item]['interestExpense'] / millions
@@ -199,9 +194,7 @@ for ticker in imported_list:
             financials[dates[item]]['GW_&_IntAssets'] = (
                 BS[item]['goodwillAndIntangibleAssets'] / millions
             )
-            financials[dates[item]]['Total Assets'] = (
-                BS[item]['totalAssets'] / millions
-            )
+            financials[dates[item]]['Total Assets'] = BS[item]['totalAssets'] / millions
             financials[dates[item]]['Cur Liab'] = (
                 BS[item]['totalCurrentLiabilities'] / millions
             )
@@ -225,12 +218,8 @@ for ticker in imported_list:
             financials[dates[item]]['CF Financing'] = (
                 CF[item]['netCashUsedProvidedByFinancingActivities'] / millions
             )
-            financials[dates[item]]['CAPEX'] = (
-                CF[item]['capitalExpenditure'] / millions
-            )
-            financials[dates[item]]['FCF'] = (
-                CF[item]['freeCashFlow'] / millions
-            )
+            financials[dates[item]]['CAPEX'] = CF[item]['capitalExpenditure'] / millions
+            financials[dates[item]]['FCF'] = CF[item]['freeCashFlow'] / millions
             financials[dates[item]]['Dividends Paid'] = (
                 CF[item]['dividendsPaid'] / millions
             )
@@ -243,8 +232,7 @@ for ticker in imported_list:
 
     # Transform the output dictionary into a Pandas Dataframe:
     #     Orientation can be "index" or "columns".
-    fundamentals_financials_df = pd.DataFrame.from_dict(financials,
-                                                        orient='index')
+    fundamentals_financials_df = pd.DataFrame.from_dict(financials, orient='index')
     fundamentals_financials_df.index.name = 'Date'
 
     # fundamentals_metrics_df
@@ -265,26 +253,19 @@ for ticker in imported_list:
         for item in range(5):
             financials[dates[item]] = {}
             # Key Metrics Get
-            financials[dates[item]]['Mkt Cap'] = (
-                Metrics[item]['marketCap'] / millions
-            )
-            financials[dates[item]]['Debt to Assets'] = (
-                Metrics[item]['debtToAssets']
-            )
-            financials[dates[item]]['Debt to Equity'] = (
-                Metrics[item]['debtToEquity']
-            )
-            financials[dates[item]]['Revenue per Share'] = (
-                Metrics[item]['revenuePerShare']
-            )
-            financials[dates[item]]['Net Income per Share'] = (
-                Metrics[item]['netIncomePerShare']
-            )
+            financials[dates[item]]['Mkt Cap'] = Metrics[item]['marketCap'] / millions
+            financials[dates[item]]['Debt to Assets'] = Metrics[item]['debtToAssets']
+            financials[dates[item]]['Debt to Equity'] = Metrics[item]['debtToEquity']
+            financials[dates[item]]['Revenue per Share'] = Metrics[item][
+                'revenuePerShare'
+            ]
+            financials[dates[item]]['Net Income per Share'] = Metrics[item][
+                'netIncomePerShare'
+            ]
 
     # Transform the output dictionary into a Pandas Dataframe:
     #     Orientation can be "index" or "columns"
-    fundamentals_metrics_df = pd.DataFrame.from_dict(financials,
-                                                     orient='index')
+    fundamentals_metrics_df = pd.DataFrame.from_dict(financials, orient='index')
     fundamentals_metrics_df.index.name = 'Date'
 
     # fundamentals_ratios_df
@@ -317,65 +298,38 @@ for ticker in imported_list:
         for item in range(5):
             financials[dates[item]] = {}
             # Ratios
-            financials[dates[item]]['Gross Profit Margin'] = (
-                Ratios[item]['grossProfitMargin']
-            )
-            financials[dates[item]]['Op Margin'] = (
-                Ratios[item]['operatingProfitMargin']
-            )
-            financials[dates[item]]['Int Coverage'] = (
-                Ratios[item]['interestCoverage']
-            )
-            financials[dates[item]]['Net Profit Margin'] = (
-                Ratios[item]['netProfitMargin']
-            )
-            financials[dates[item]]['Dividend Yield'] = (
-                Ratios[item]['dividendYield']
-            )
-            financials[dates[item]]['Current Ratio'] = (
-                Ratios[item]['currentRatio']
-            )
-            financials[dates[item]]['Operating Cycle'] = (
-                Ratios[item]['operatingCycle']
-            )
-            financials[dates[item]]['Days of AP Outstanding'] = (
-                Ratios[item]['daysOfPayablesOutstanding']
-            )
-            financials[dates[item]]['Cash Conversion Cycle'] = (
-                Ratios[item]['cashConversionCycle']
-            )
-            financials[dates[item]]['ROA'] = (
-                Ratios[item]['returnOnAssets']
-            )
-            financials[dates[item]]['ROE'] = (
-                Ratios[item]['returnOnEquity']
-            )
-            financials[dates[item]]['ROCE'] = (
-                Ratios[item]['returnOnCapitalEmployed']
-            )
-            financials[dates[item]]['PE'] = (
-                Ratios[item]['priceEarningsRatio']
-            )
-            financials[dates[item]]['PS'] = (
-                Ratios[item]['priceToSalesRatio']
-            )
-            financials[dates[item]]['PB'] = (
-                Ratios[item]['priceToBookRatio']
-            )
-            financials[dates[item]]['PCF'] = (
-                Ratios[item]['priceToFreeCashFlowsRatio']
-            )
-            financials[dates[item]]['PEG'] = (
-                Ratios[item]['priceEarningsToGrowthRatio']
-            )
+            financials[dates[item]]['Gross Profit Margin'] = Ratios[item][
+                'grossProfitMargin'
+            ]
+            financials[dates[item]]['Op Margin'] = Ratios[item]['operatingProfitMargin']
+            financials[dates[item]]['Int Coverage'] = Ratios[item]['interestCoverage']
+            financials[dates[item]]['Net Profit Margin'] = Ratios[item][
+                'netProfitMargin'
+            ]
+            financials[dates[item]]['Dividend Yield'] = Ratios[item]['dividendYield']
+            financials[dates[item]]['Current Ratio'] = Ratios[item]['currentRatio']
+            financials[dates[item]]['Operating Cycle'] = Ratios[item]['operatingCycle']
+            financials[dates[item]]['Days of AP Outstanding'] = Ratios[item][
+                'daysOfPayablesOutstanding'
+            ]
+            financials[dates[item]]['Cash Conversion Cycle'] = Ratios[item][
+                'cashConversionCycle'
+            ]
+            financials[dates[item]]['ROA'] = Ratios[item]['returnOnAssets']
+            financials[dates[item]]['ROE'] = Ratios[item]['returnOnEquity']
+            financials[dates[item]]['ROCE'] = Ratios[item]['returnOnCapitalEmployed']
+            financials[dates[item]]['PE'] = Ratios[item]['priceEarningsRatio']
+            financials[dates[item]]['PS'] = Ratios[item]['priceToSalesRatio']
+            financials[dates[item]]['PB'] = Ratios[item]['priceToBookRatio']
+            financials[dates[item]]['PCF'] = Ratios[item]['priceToFreeCashFlowsRatio']
+            financials[dates[item]]['PEG'] = Ratios[item]['priceEarningsToGrowthRatio']
             financials[dates[item]]['EaringsYield'] = (
                 1 / Ratios[item]['priceEarningsRatio']
             )
 
     # Transform the output dictionary into a Pandas Dataframe:
     # Orientation can be "index" or "columns".
-    fundamentals_ratios_df = pd.DataFrame.from_dict(financials,
-                                                    orient='index')
+    fundamentals_ratios_df = pd.DataFrame.from_dict(financials, orient='index')
     fundamentals_ratios_df.index.name = 'Date'
 
     # Creating a Separate New Dataframe for the Graphs: graph_df
@@ -415,23 +369,15 @@ for ticker in imported_list:
     graph_df['Net_income_perc'] = round(
         ((graph_df['Net Income'] / graph_df['Revenue']) * 100), 0
     )
-    graph_df['FCF_perc'] = round(
-        ((graph_df['FCF'] / graph_df['Revenue']) * 100), 0
-    )
+    graph_df['FCF_perc'] = round(((graph_df['FCF'] / graph_df['Revenue']) * 100), 0)
     graph_df['Int_exp_perc'] = round(
         ((graph_df['Interest Expense'] / graph_df['Revenue']) * 100), 0
     )
 
     # Book value growth
-    graph_df['Book_Value'] = (
-        graph_df['SH Equity'] - graph_df['GW_&_IntAssets']
-    )
-    graph_df['LY_Book_Value'] = (
-        graph_df['Book_Value'].shift(1)
-    )
-    graph_df['LY_Equity'] = (
-        graph_df['SH Equity'].shift(1)
-    )
+    graph_df['Book_Value'] = graph_df['SH Equity'] - graph_df['GW_&_IntAssets']
+    graph_df['LY_Book_Value'] = graph_df['Book_Value'].shift(1)
+    graph_df['LY_Equity'] = graph_df['SH Equity'].shift(1)
 
     # [Graph] Balance Sheet total USD
     fig = go.Figure(
@@ -472,9 +418,8 @@ for ticker in imported_list:
         barmode='group',  # group or stack
         title=str('Balance Sheet for: ' + company_name),
         xaxis_title='Year',
-        yaxis_title='Amount $mm USD',
-        legend=dict(orientation="h", yanchor="bottom",
-                    y=1.0, xanchor="right", x=1),
+        yaxis_title=('Amount $mm '+currency),
+        legend=dict(orientation="h", yanchor="bottom", y=1.0, xanchor="right", x=1),
         width=800,
         height=400,
     )
@@ -524,8 +469,7 @@ for ticker in imported_list:
         title=str('Common Size Balance Sheet: ' + company_name),
         xaxis_title='Year',
         yaxis_title='Percent %',
-        legend=dict(orientation="h", yanchor="bottom",
-                    y=1.0, xanchor="right", x=1),
+        legend=dict(orientation="h", yanchor="bottom", y=1.0, xanchor="right", x=1),
         width=800,
         height=400,
     )
@@ -570,9 +514,8 @@ for ticker in imported_list:
         barmode='group',  # group or stack
         title=str('Income Statement for: ' + company_name),
         xaxis_title='Year',
-        yaxis_title='Amount $ mm USD',
-        legend=dict(orientation="h", yanchor="bottom",
-                    y=1.0, xanchor="right", x=1),
+        yaxis_title=('Amount $mm '+currency),
+        legend=dict(orientation="h", yanchor="bottom", y=1.0, xanchor="right", x=1),
         width=800,
         height=400,
     )
@@ -618,8 +561,7 @@ for ticker in imported_list:
         title=str('Common Size Income Statement for: ' + company_name),
         xaxis_title='Year',
         yaxis_title='Percent %',
-        legend=dict(orientation="h", yanchor="bottom",
-                    y=1.0, xanchor="right", x=1),
+        legend=dict(orientation="h", yanchor="bottom", y=1.0, xanchor="right", x=1),
         width=800,
         height=400,
     )
@@ -661,9 +603,8 @@ for ticker in imported_list:
         barmode='group',  # group or stack
         title=str('Cash Flow Statement for: ' + company_name),
         xaxis_title='Year',
-        yaxis_title='Amount $',
-        legend=dict(orientation="h", yanchor="bottom",
-                    y=1.0, xanchor="right", x=1),
+        yaxis_title=('Amount $mm '+currency),
+        legend=dict(orientation="h", yanchor="bottom", y=1.0, xanchor="right", x=1),
         width=800,
         height=400,
     )
@@ -720,13 +661,11 @@ for ticker in imported_list:
     fig.update_layout(
         barmode='group',  # group or stack
         title=str(
-            'Equity Uses: Distribution, Investment or Debt Payment: '
-            + company_name
+            'Equity Uses: Distribution, Investment or Debt Payment: ' + company_name
         ),
         xaxis_title='Year',
-        yaxis_title='Amount $',
-        legend=dict(orientation="h", yanchor="bottom",
-                    y=1.0, xanchor="right", x=1),
+        yaxis_title=('Amount $mm '+currency),
+        legend=dict(orientation="h", yanchor="bottom", y=1.0, xanchor="right", x=1),
         width=800,
         height=400,
     )
@@ -738,9 +677,7 @@ for ticker in imported_list:
     fig.write_image("images/output/equity_uses.png", scale=2)
 
     # Check the values in the dataframe vs the graph
-    graph_df[["Date", "LY_Equity",
-              "Net Income", "Dividends Paid",
-              "SH Equity"]]
+    graph_df[["Date", "LY_Equity", "Net Income", "Dividends Paid", "SH Equity"]]
 
     # Extracting variable information we will use later
     company_symbol = profile_df.at[0, 'symbol']
@@ -821,8 +758,7 @@ for ticker in imported_list:
     table_is_df = table_is_df.transpose()
 
     # Save the data as an image:
-    dfi.export(table_is_df, 'images/output/is_table.png',
-               table_conversion='matplotlib')
+    dfi.export(table_is_df, 'images/output/is_table.png', table_conversion='matplotlib')
 
     # Print table name
     print("Income Statement")
@@ -848,8 +784,7 @@ for ticker in imported_list:
     # Transform values to percentages
     for column_name in cs_is_columns:
         table_cs_is_df[column_name] = round(
-            ((table_cs_is_df[column_name] / table_cs_is_df['Revenue']) * 100),
-            0
+            ((table_cs_is_df[column_name] / table_cs_is_df['Revenue']) * 100), 0
         )
 
     # Transform percentages to string and format to include % sybol.
@@ -866,8 +801,9 @@ for ticker in imported_list:
     table_cs_is_df = table_cs_is_df.transpose()
 
     # Save the data as an image:
-    dfi.export(table_cs_is_df, 'images/output/cs_is_table.png',
-               table_conversion='matplotlib')
+    dfi.export(
+        table_cs_is_df, 'images/output/cs_is_table.png', table_conversion='matplotlib'
+    )
 
     # Balance Sheet Dataframe
     # Creating a new dataframe for the PDF Table Output
@@ -931,8 +867,7 @@ for ticker in imported_list:
     table_bs_df = table_bs_df.transpose()
 
     # Save the data as an image:
-    dfi.export(table_bs_df, 'images/output/bs_table.png',
-               table_conversion='matplotlib')
+    dfi.export(table_bs_df, 'images/output/bs_table.png', table_conversion='matplotlib')
 
     # Common Size Balance Sheet Dataframe
     # Creating a new dataframe for the PDF Table Output
@@ -952,8 +887,7 @@ for ticker in imported_list:
     # Transform values to percentages
     for column_name in cs_bs_columns:
         table_cs_bs_df[column_name] = round(
-            ((table_cs_bs_df[column_name]/table_cs_bs_df['Total Assets'])*100),
-            0
+            ((table_cs_bs_df[column_name] / table_cs_bs_df['Total Assets']) * 100), 0
         )
 
     # Transform percentages to string and format as percentage
@@ -967,8 +901,9 @@ for ticker in imported_list:
     table_cs_bs_df = table_cs_bs_df.transpose()
 
     # Save the data as an image:
-    dfi.export(table_cs_bs_df, 'images/output/cs_bs_table.png',
-               table_conversion='matplotlib')
+    dfi.export(
+        table_cs_bs_df, 'images/output/cs_bs_table.png', table_conversion='matplotlib'
+    )
 
     # Print table name
     print("Common Size Balance Sheet")
@@ -1012,8 +947,7 @@ for ticker in imported_list:
 
     # Add change in cash column
     table_cf_df['Change in Cash'] = (
-        table_cf_df['cashAtEndOfPeriod']
-        - table_cf_df['cashAtBeginningOfPeriod']
+        table_cf_df['cashAtEndOfPeriod'] - table_cf_df['cashAtBeginningOfPeriod']
     )
 
     # Sort descending
@@ -1043,8 +977,7 @@ for ticker in imported_list:
     table_cf_df = table_cf_df.transpose()
 
     # Save the data as an image:
-    dfi.export(table_cf_df, 'images/output/cf_table.png',
-               table_conversion='matplotlib')
+    dfi.export(table_cf_df, 'images/output/cf_table.png', table_conversion='matplotlib')
 
     # Print table name
     print("Cash Flow Statement")
@@ -1057,9 +990,7 @@ for ticker in imported_list:
 
     # Filter the fundamentals_metrics_df
     fundamentals_metrics_filtered_df = pd.DataFrame(
-        fundamentals_metrics_df, columns=['Mkt Cap',
-                                          'Debt to Assets',
-                                          'Debt to Equity']
+        fundamentals_metrics_df, columns=['Mkt Cap', 'Debt to Assets', 'Debt to Equity']
     )
 
     # Filted the fundamentals_ratios_df
@@ -1169,8 +1100,11 @@ for ticker in imported_list:
     table_metrics_df = table_metrics_df.transpose()
 
     # Save the data as an image:
-    dfi.export(table_metrics_df, 'images/output/main_metrics_table.png',
-               table_conversion='matplotlib')
+    dfi.export(
+        table_metrics_df,
+        'images/output/main_metrics_table.png',
+        table_conversion='matplotlib',
+    )
 
     # Print Table Name
     print("Main Metrics")
@@ -1190,7 +1124,6 @@ for ticker in imported_list:
     company_symbol = profile_df.at[0, 'symbol']
     company_name = profile_df.at[0, 'companyName']
     company_description = Profile[0]['description']
-    currency = Profile[0]['currency']
     isin = Profile[0]['isin']
     cusip = Profile[0]['cusip']
     exchange = Profile[0]['exchangeShortName']
@@ -1312,8 +1245,7 @@ for ticker in imported_list:
     pdf.ln(10)
     pdf.cell(14)
     pdf.set_font('Helvetica', 'B', 11)
-    pdf.cell(w=50, h=5, txt="Company Summary:",
-             border=border_chg, ln=1, align='L')
+    pdf.cell(w=50, h=5, txt="Company Summary:", border=border_chg, ln=1, align='L')
     pdf.ln(3)
 
     # Company summary table
@@ -1337,8 +1269,7 @@ for ticker in imported_list:
     # Company description
     pdf.cell(14)
     pdf.multi_cell(
-        w=165, h=5, txt=company_description,
-        border=border_chg, align='J', fill=False
+        w=165, h=5, txt=company_description, border=border_chg, align='J', fill=False
     )
 
     # Company image
@@ -1353,8 +1284,7 @@ for ticker in imported_list:
     # Title
     pdf.set_font('Helvetica', 'B', 11)
     pdf.ln(10)
-    pdf.cell(w=45, h=5, txt=" Financial Summary:",
-             border=border_chg, ln=1, align='L')
+    pdf.cell(w=45, h=5, txt=" Financial Summary:", border=border_chg, ln=1, align='L')
 
     # Amount in Millions
     pdf.cell(10)
@@ -1362,7 +1292,7 @@ for ticker in imported_list:
     pdf.cell(
         w=40,
         h=5,
-        txt="Amounts in $ USD (Millions)",
+        txt=("Amounts in $ "+currency+" (Millions)"),
         border=border_chg,
         ln=0,
         align='L',
@@ -1380,8 +1310,7 @@ for ticker in imported_list:
     pdf.set_font('Helvetica', 'B', 11)
     pdf.ln(10)
     pdf.cell(
-        w=45, h=5, txt=" Financial statements:",
-        border=border_chg, ln=1, align='L'
+        w=45, h=5, txt=" Financial statements:", border=border_chg, ln=1, align='L'
     )
 
     # Amount in Millions
@@ -1390,7 +1319,7 @@ for ticker in imported_list:
     pdf.cell(
         w=40,
         h=5,
-        txt="Amounts in $ USD (Millions)",
+        txt=("Amounts in $ "+currency+" (Millions)"),
         border=border_chg,
         ln=0,
         align='L',
@@ -1483,6 +1412,4 @@ for ticker in imported_list:
     pdf.image('images/output/equity_uses.png', x=30, y=175, h=80)
 
     # Save output as PDF
-    pdf.output(
-        'files/'+company_symbol + " " + today.strftime("%Y-%m-%d") + ".pdf"
-        )
+    pdf.output('files/' + company_symbol + " " + today.strftime("%Y-%m-%d") + ".pdf")
