@@ -39,8 +39,7 @@ for ticker in imported_list:
         "images/output/cs_bs_table.png",
         "images/output/cf_table.png",
         "images/output/main_metrics_table.png",
-        "images/output/company_image.png",
-    )
+        "images/output/company_image.png")
     print("Removing previous images:")
     for path in paths:
         if os.path.exists(path):
@@ -52,8 +51,6 @@ for ticker in imported_list:
 
     # Importing the data
     ####################
-    # Data provided by Financial Modeling Prep
-    # https://financialmodelingprep.com/developer/docs/
 
     # FMP API Key
     # api = os.environ.get("token_finmodelprep")
@@ -79,8 +76,8 @@ for ticker in imported_list:
     Raiting = requests.get(f'{www}{rtg_www}{company}?apikey={api}').json()
     Surprises = requests.get(f'{www}{es_www}{company}?apikey={api}').json()
 
-    # Exploring the downloaded information
-    ######################################
+    # Saving the data as a Dataframe
+    ################################
     is_df = pd.DataFrame(IS)
     bs_df = pd.DataFrame(BS)
     cf_df = pd.DataFrame(CF)
@@ -89,6 +86,18 @@ for ticker in imported_list:
     profile_df = pd.DataFrame(Profile)
     raiting_df = pd.DataFrame(Raiting)
     surprises_df = pd.DataFrame(Surprises)
+
+    # Check all dataframes have data
+    ################################
+    print("Checking for empty Dataframes:")
+    print("is_df is empty: "+str(is_df.empty))
+    print("bs_df is empty: "+str(bs_df.empty))
+    print("cf_df is empty: "+str(cf_df.empty))
+    print("ratios_df is empty: "+str(ratios_df.empty))
+    print("metrics_df is empty: "+str(metrics_df.empty))
+    print("profile_df is empty: "+str(profile_df.empty))
+    print("raiting_df is empty: "+str(raiting_df.empty))
+    print("surprises_df is empty: "+str(surprises_df.empty)+"\n")
 
     # Global Variables:
     ###################
@@ -109,6 +118,15 @@ for ticker in imported_list:
     company_image = Profile[0]['image']
     ipo_date = Profile[0]['ipoDate']
     ceo = Profile[0]['ceo']
+
+    # Getting the company image
+    ###########################
+    r = requests.get(str(imageurl))
+    with open("images/output/company_image.png", "wb") as f:
+        f.write(r.content)
+
+    # Variables used to transform the dataframes
+    ############################################
     millions = 1_000_000
     # To divide raw data by 1 million to make it easier to read.
     financials = {}
@@ -121,19 +139,14 @@ for ticker in imported_list:
     # To check data for fundamentals_metrics_df
     isempty_ratios = ratios_df.empty
     # To check data for fundamentals_metrics_df
-    # Getting the company image
-    r = requests.get(str(imageurl))
-    with open("images/output/company_image.png", "wb") as f:
-        f.write(r.content)
 
     # fundamentals_financials_df
-    print("Data Frame Checks:")
+    ############################
+    print("Dataframe column checks:")
     if isempty_fs is True:
         print("fundamentals_financials_df is empty")
-
         for item in range(5):  # Try Len(is_df) alternative
             financials[dates[item]] = {}
-
             # Income Statement Get
             financials[dates[item]]['WA ShsOut'] = 99
             financials[dates[item]]['WA ShsOutDil'] = 99
@@ -144,7 +157,6 @@ for ticker in imported_list:
             financials[dates[item]]['Op Income'] = 99
             financials[dates[item]]['Net Income'] = 99
             financials[dates[item]]['EPS'] = 99
-
             # Balance Sheet Get
             financials[dates[item]]['Cash'] = 99
             financials[dates[item]]['Inventory'] = 99
@@ -157,7 +169,6 @@ for ticker in imported_list:
             financials[dates[item]]['LT Liab'] = 99
             financials[dates[item]]['Total Liab'] = 99
             financials[dates[item]]['SH Equity'] = 99
-
             # Cash Flow Statement
             financials[dates[item]]['CF Operations'] = 99
             financials[dates[item]]['CF Investing'] = 99
@@ -167,12 +178,10 @@ for ticker in imported_list:
             financials[dates[item]]['Dividends Paid'] = 99
             financials[dates[item]]['cashAtBeginningOfPeriod'] = 99
             financials[dates[item]]['cashAtEndOfPeriod'] = 99
-
     else:
         print("fundamentals_financials_df is not empty")
         for item in range(5):
             financials[dates[item]] = {}
-
             # Income Statement Get
             financials[dates[item]]['WA ShsOut'] = (
                 IS[item]['weightedAverageShsOut'] / millions
@@ -196,7 +205,6 @@ for ticker in imported_list:
             financials[dates[item]]['Interest Expense'] = (
                 IS[item]['interestExpense'] / millions
             )
-
             # Balance Sheet Get
             financials[dates[item]]['Cash'] = (
                 BS[item]['cashAndShortTermInvestments'] / millions
@@ -223,7 +231,6 @@ for ticker in imported_list:
             financials[dates[item]]['SH Equity'] = (
                 BS[item]['totalStockholdersEquity'] / millions
             )
-
             # Cash Flow Statement
             financials[dates[item]]['CF Operations'] = (
                 CF[item]['netCashProvidedByOperatingActivities'] / millions
@@ -245,17 +252,16 @@ for ticker in imported_list:
             financials[dates[item]]['cashAtEndOfPeriod'] = (
                 CF[item]['cashAtEndOfPeriod'] / millions
             )
-
     # Transform the output dictionary into a Pandas Dataframe:
-    #     Orientation can be "index" or "columns".
+    # Orientation can be "index" or "columns".
     fundamentals_financials_df = pd.DataFrame.from_dict(financials,
                                                         orient='index')
     fundamentals_financials_df.index.name = 'Date'
 
     # fundamentals_metrics_df
+    #########################
     if isempty_metrics is True:
         print("fundamentals_metrics_df is empty")
-
         for item in range(5):
             financials[dates[item]] = {}
             # Key Metrics Get
@@ -264,7 +270,6 @@ for ticker in imported_list:
             financials[dates[item]]['Debt to Equity'] = 99
             financials[dates[item]]['Revenue per Share'] = 99
             financials[dates[item]]['Net Income per Share'] = 99
-
     else:
         print("fundamentals_metrics_df is not empty")
         for item in range(5):
@@ -279,7 +284,6 @@ for ticker in imported_list:
             financials[dates[item]]['Net Income per Share'] = Metrics[item][
                 'netIncomePerShare'
             ]
-
     # Transform the output dictionary into a Pandas Dataframe:
     #     Orientation can be "index" or "columns"
     fundamentals_metrics_df = pd.DataFrame.from_dict(
@@ -288,9 +292,9 @@ for ticker in imported_list:
     fundamentals_metrics_df.index.name = 'Date'
 
     # fundamentals_ratios_df
+    ########################
     if isempty_ratios is True:
         print("fundamentals_ratios_df is empty \n")
-
         for item in range(5):
             financials[dates[item]] = {}
             # Ratios
@@ -311,7 +315,6 @@ for ticker in imported_list:
             financials[dates[item]]['PB'] = 99
             financials[dates[item]]['PCF'] = 99
             financials[dates[item]]['PEG'] = 99
-
     else:
         print("fundamentals_ratios_df is not empty \n")
         for item in range(5):
@@ -345,15 +348,14 @@ for ticker in imported_list:
             financials[dates[item]]['EaringsYield'] = (
                 1 / Ratios[item]['priceEarningsRatio']
             )
-
     # Transform the output dictionary into a Pandas Dataframe:
     # Orientation can be "index" or "columns".
     fundamentals_ratios_df = pd.DataFrame.from_dict(financials, orient='index')
     fundamentals_ratios_df.index.name = 'Date'
 
     # Creating a Separate New Dataframe for the Graphs: graph_df
+    ############################################################
     # This way we can modify it without affecting the original data
-    # Copy fundamentals_financials_df
     graph_df = fundamentals_financials_df.copy(deep=True)
     graph_df.sort_index(ascending=True, inplace=True)
 
@@ -398,7 +400,8 @@ for ticker in imported_list:
     graph_df['LY_Book_Value'] = graph_df['Book_Value'].shift(1)
     graph_df['LY_Equity'] = graph_df['SH Equity'].shift(1)
 
-    # [Graph] Balance Sheet total USD
+    # [Graph] Balance Sheet total $$
+    ################################
     fig = go.Figure(
         data=[
             go.Bar(
@@ -406,33 +409,28 @@ for ticker in imported_list:
                 x=graph_df["Date"],
                 y=graph_df['Total Assets'],
                 marker_color='#003B73',
-                offsetgroup=0,
-            ),
+                offsetgroup=0),
             go.Bar(
                 name='Equity',
                 x=graph_df["Date"],
                 y=graph_df['SH Equity'],
                 marker_color='#01949a',
-                offsetgroup=1,
-            ),
+                offsetgroup=1),
             go.Bar(
                 name='Liabilities',
                 x=graph_df["Date"],
                 y=graph_df['Total Liab'],
                 marker_color='#db1f48',
                 offsetgroup=1,
-                base=graph_df['SH Equity'],
-            ),
+                base=graph_df['SH Equity']),
             go.Bar(
                 name='GW & Intangibles',
                 x=graph_df["Date"],
                 y=graph_df['GW_&_IntAssets'],
                 marker_color='#746C70',
-                offsetgroup=2,
-            ),
+                offsetgroup=2),
         ]
     )
-
     fig.update_layout(
         barmode='group',  # group or stack
         title=str('Balance Sheet for: ' + company_name),
@@ -444,16 +442,13 @@ for ticker in imported_list:
                     xanchor="right",
                     x=1),
         width=800,
-        height=400,
-    )
-
+        height=400)
     fig.update_traces(texttemplate='%{y:.2s}', textposition='inside')
-
     # fig.show()
-
     fig.write_image("images/output/bs.png", scale=2)
 
     # [Graph] Balance Sheet percentage amount
+    #########################################
     fig = go.Figure(
         data=[
             go.Bar(
@@ -461,30 +456,26 @@ for ticker in imported_list:
                 x=graph_df["Date"],
                 y=(graph_df['Total Assets'] / graph_df['Total Assets']) * 100,
                 marker_color='#004369',
-                offsetgroup=0,
-            ),
+                offsetgroup=0),
             go.Bar(
                 name='Equity',
                 x=graph_df["Date"],
                 y=graph_df['tot_equity_perc'],
                 marker_color='#01949a',
-                offsetgroup=1,
-            ),
+                offsetgroup=1),
             go.Bar(
                 name='Liabilities',
                 x=graph_df["Date"],
                 y=graph_df['tot_liability_perc'],
                 marker_color='#db1f48',
                 offsetgroup=1,
-                base=graph_df['tot_equity_perc'],
-            ),
+                base=graph_df['tot_equity_perc']),
             go.Bar(
                 name='GW & Intangibles',
                 x=graph_df["Date"],
                 y=graph_df['tot_intang_equity_perc'],
                 marker_color='#746C70',
-                offsetgroup=2,
-            ),
+                offsetgroup=2),
         ]
     )
     fig.update_layout(
@@ -498,42 +489,35 @@ for ticker in imported_list:
                     xanchor="right",
                     x=1),
         width=800,
-        height=400,
-    )
-
+        height=400)
     fig.update_traces(texttemplate='%{y:.2s}', textposition='inside')
-
     # fig.show()
-
     fig.write_image("images/output/cs_bs.png", scale=2)
 
-    # [Graph] Income Statement USD amount graph
+    # [Graph] Income Statement $$ amount
+    ####################################
     fig = go.Figure(
         data=[
             go.Bar(
                 name='Revenue',
                 x=graph_df["Date"],
                 y=graph_df['Revenue'],
-                marker_color='#004369',
-            ),
+                marker_color='#004369'),
             go.Bar(
                 name='Net Income',
                 x=graph_df["Date"],
                 y=graph_df['Net Income'],
-                marker_color='#41729f',
-            ),
+                marker_color='#41729f'),
             go.Bar(
                 name='Cash Flow',
                 x=graph_df["Date"],
                 y=graph_df['FCF'],
-                marker_color='#028476',
-            ),
+                marker_color='#028476'),
             go.Bar(
                 name='Interest Expense',
                 x=graph_df["Date"],
                 y=graph_df['Interest Expense'],
-                marker_color='#DB1F48',
-            ),
+                marker_color='#DB1F48'),
         ]
     )
 
@@ -548,45 +532,37 @@ for ticker in imported_list:
                     xanchor="right",
                     x=1),
         width=800,
-        height=400,
-    )
-
+        height=400)
     fig.update_traces(texttemplate='%{y:.2s}', textposition='inside')
-
     # fig.show()
-
     fig.write_image("images/output/is.png", scale=2)
 
     # [Graph] Income Statement percentage amount
+    ############################################
     fig = go.Figure(
         data=[
             go.Bar(
                 name='Revenue',
                 x=graph_df["Date"],
                 y=graph_df['Revenue_perc'],
-                marker_color='#004369',
-            ),
+                marker_color='#004369'),
             go.Bar(
                 name='Net Income',
                 x=graph_df["Date"],
                 y=graph_df['Net_income_perc'],
-                marker_color='#41729f',
-            ),
+                marker_color='#41729f'),
             go.Bar(
                 name='Cash Flow',
                 x=graph_df["Date"],
                 y=graph_df['FCF_perc'],
-                marker_color='#028476',
-            ),
+                marker_color='#028476'),
             go.Bar(
                 name='Interest Expense',
                 x=graph_df["Date"],
                 y=graph_df['Int_exp_perc'],
-                marker_color='#DB1F48',
-            ),
+                marker_color='#DB1F48'),
         ]
     )
-
     fig.update_layout(
         barmode='group',  # group or stack
         title=str('Common Size Income Statement for: ' + company_name),
@@ -598,16 +574,13 @@ for ticker in imported_list:
                     xanchor="right",
                     x=1),
         width=800,
-        height=400,
-    )
-
+        height=400)
     fig.update_traces(texttemplate='%{y:.2s}', textposition='inside')
-
     # fig.show()
-
     fig.write_image("images/output/cs_is.png", scale=2)
 
-    # Cash Flow Statment
+    #  [Graph] Cash Flow Statment
+    #############################
     fig = go.Figure(
         data=[
             go.Bar(
@@ -615,25 +588,21 @@ for ticker in imported_list:
                 x=graph_df["Date"],
                 y=graph_df['CF Operations'],
                 marker_color='#01949A',
-                offsetgroup=2,
-            ),
+                offsetgroup=2),
             go.Bar(
                 name='CF Investing',
                 x=graph_df["Date"],
                 y=graph_df['CF Investing'],
                 marker_color='#004369',
-                offsetgroup=3,
-            ),
+                offsetgroup=3),
             go.Bar(
                 name='CF Financing',
                 x=graph_df["Date"],
                 y=graph_df['CF Financing'],
                 marker_color='#DB1F48',
-                offsetgroup=4,
-            ),
+                offsetgroup=4),
         ]
     )
-
     fig.update_layout(
         barmode='group',  # group or stack
         title=str('Cash Flow Statement for: ' + company_name),
@@ -645,16 +614,13 @@ for ticker in imported_list:
                     xanchor="right",
                     x=1),
         width=800,
-        height=400,
-    )
-
+        height=400)
     fig.update_traces(texttemplate='%{y:.2s}', textposition='inside')
-
     # fig.show()
-
     fig.write_image("images/output/cash_flow.png", scale=2)
 
-    # Equity distribution, reinvestment, and debt payment graph
+    # [Graph] Equity distribution, reinvestment, and debt payment
+    #############################################################
     fig = go.Figure(
         data=[
             go.Bar(
@@ -662,22 +628,19 @@ for ticker in imported_list:
                 x=graph_df["Date"],
                 y=graph_df['LY_Equity'],
                 marker_color='#738fa7',
-                offsetgroup=0,
-            ),
+                offsetgroup=0),
             go.Bar(
                 name='NetIncome',
                 x=graph_df["Date"],
                 y=graph_df['Net Income'],
                 marker_color='#005f73',
-                offsetgroup=1,
-            ),
+                offsetgroup=1),
             go.Bar(
                 name='Dividends',
                 x=graph_df["Date"],
                 y=graph_df['Dividends Paid'],
                 marker_color='#0a9396',
-                offsetgroup=1,
-            ),
+                offsetgroup=1),
             go.Bar(
                 name='Ending Equity (expected)',
                 x=graph_df["Date"],
@@ -685,15 +648,13 @@ for ticker in imported_list:
                 + graph_df['Net Income']
                 + graph_df['Dividends Paid'],
                 marker_color='#41729f',
-                offsetgroup=2,
-            ),
+                offsetgroup=2),
             go.Bar(
                 name='Ending Equity (real)',
                 x=graph_df["Date"],
                 y=graph_df['SH Equity'],
                 marker_color='#004369',
-                offsetgroup=3,
-            ),
+                offsetgroup=3),
         ]
     )
 
@@ -710,30 +671,20 @@ for ticker in imported_list:
                     xanchor="right",
                     x=1),
         width=800,
-        height=400,
-    )
-
+        height=400)
     fig.update_traces(texttemplate='%{y:.2s}', textposition='inside')
-
     # fig.show()
-
     fig.write_image("images/output/equity_uses.png", scale=2)
 
-    # Check the values in the dataframe vs the graph
-    graph_df[["Date",
-              "LY_Equity",
-              "Net Income",
-              "Dividends Paid",
-              "SH Equity"]]
-
     # Extracting variable information we will use later
+    ###################################################
     company_symbol = profile_df.at[0, 'symbol']
     company_name = profile_df.at[0, 'companyName']
     company_description = Profile[0]['description']
 
     # Income Statement Dataframe
+    ##############################
     # Creating a new dataframe for the PDF Table Output
-
     # Copy financials dataframe
     table_is_df = fundamentals_financials_df.copy(deep=True)
 
@@ -1217,8 +1168,7 @@ for ticker in imported_list:
                 ln=0,
                 align='R',
                 fill=False,
-                link='',
-            )
+                link='')
             self.ln(4)
             # Company Name
             self.ln(12)
@@ -1244,8 +1194,7 @@ for ticker in imported_list:
                 txt='*Data provided by Financial Modeling Prep',
                 border=border_chg,
                 ln=1,
-                align='R',
-            )
+                align='R')
             self.ln(1)
             # Page number
             self.set_font('Helvetica', 'BI', 10)
@@ -1255,8 +1204,7 @@ for ticker in imported_list:
                 txt='Page ' + str(self.page_no()) + ' of {nb}',
                 border=border_chg,
                 ln=0,
-                align='C',
-            )
+                align='C')
     # Instantiation of Class
     pdf = PDF(orientation="P", unit="mm", format="Letter")
     # Document Description
@@ -1268,14 +1216,12 @@ for ticker in imported_list:
         "FreeSans",
         "",
         "/Users/portfedh/Library/Fonts/freefont-20120503/FreeSans.ttf",
-        uni=True,
-    )
+        uni=True)
     pdf.add_font(
         "FreeSans",
         "B",
         "/Users/portfedh/Library/Fonts/freefont-20120503/FreeSansBold.ttf",
-        uni=True,
-    )
+        uni=True)
     pdf.set_font('FreeSans', 'B', 11)
 
     # Page 1
@@ -1304,8 +1250,7 @@ for ticker in imported_list:
                 datum,
                 border=border_chg,
                 ln=3,
-                max_line_height=pdf.font_size,
-            )
+                max_line_height=pdf.font_size)
         pdf.ln(line_height)
     pdf.ln(5)
     # Company description
@@ -1315,8 +1260,7 @@ for ticker in imported_list:
                    txt=company_description,
                    border=border_chg,
                    align='J',
-                   fill=False
-    )
+                   fill=False)
     # Company image
     try:
         pdf.image('images/output/company_image.png', x=100, y=215, h=15)
@@ -1345,8 +1289,7 @@ for ticker in imported_list:
         ln=0,
         align='L',
         fill=False,
-        link='',
-    )
+        link='')
     # Main metrics table
     pdf.image('images/output/main_metrics_table.png', x=40, y=62, h=150)
 
@@ -1362,8 +1305,7 @@ for ticker in imported_list:
         txt=" Financial statements:",
         border=border_chg,
         ln=1,
-        align='L'
-    )
+        align='L')
     # Amount in Millions
     pdf.cell(10)
     pdf.set_font('Helvetica', 'I', 8)
@@ -1375,8 +1317,7 @@ for ticker in imported_list:
         ln=0,
         align='L',
         fill=False,
-        link='',
-    )
+        link='')
     # Income Statement Title
     pdf.ln(15)
     pdf.cell(10)
@@ -1389,8 +1330,7 @@ for ticker in imported_list:
         ln=0,
         align='L',
         fill=False,
-        link='',
-    )
+        link='')
     # Balance Sheet Title
     pdf.ln(50)
     pdf.cell(10)
@@ -1403,8 +1343,7 @@ for ticker in imported_list:
         ln=0,
         align='L',
         fill=False,
-        link='',
-    )
+        link='')
     # Cash Flow Statement Title
     pdf.ln(70)
     pdf.cell(10)
@@ -1417,8 +1356,7 @@ for ticker in imported_list:
         ln=0,
         align='L',
         fill=False,
-        link='',
-    )
+        link='')
     # Income Statement image
     pdf.image('images/output/is_table.png', x=13, y=70, h=40)
     # Common Size Income Statement
