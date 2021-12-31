@@ -18,7 +18,7 @@ imported_list = ticker_list.list
 ######################################
 for ticker in imported_list:
     company = ticker
-    print("Company ticker: "+company+"\n")
+    print("\nCompany ticker: "+company+"\n")
 
     # Display pandas dataframes in full form
     pd.set_option("display.max_rows", None, "display.max_columns", None)
@@ -26,20 +26,20 @@ for ticker in imported_list:
     # Remove previous images
     ########################
     paths = (
-        "images/output/bs.png",
-        "images/output/cs_bs.png",
-        "images/output/is.png",
-        "images/output/cs_is.png",
-        "images/output/equity_uses.png",
-        "images/output/cash_flow.png",
-        "images/output/cs_is_table.png",
-        "images/output/cash_flow.png",
-        "images/output/is_table.png",
-        "images/output/bs_table.png",
-        "images/output/cs_bs_table.png",
-        "images/output/cf_table.png",
-        "images/output/main_metrics_table.png",
-        "images/output/company_image.png")
+             "images/output/bs.png",
+             "images/output/cs_bs.png",
+             "images/output/is.png",
+             "images/output/cs_is.png",
+             "images/output/equity_uses.png",
+             "images/output/cash_flow.png",
+             "images/output/cs_is_table.png",
+             "images/output/cash_flow.png",
+             "images/output/is_table.png",
+             "images/output/bs_table.png",
+             "images/output/cs_bs_table.png",
+             "images/output/cf_table.png",
+             "images/output/main_metrics_table.png",
+             "images/output/company_image.png")
     print("Removing previous images:")
     for path in paths:
         if os.path.exists(path):
@@ -51,7 +51,6 @@ for ticker in imported_list:
 
     # Importing the data
     ####################
-
     # FMP API Key
     # api = os.environ.get("token_finmodelprep")
     api = os.environ.get("token_finmodelprep2")
@@ -169,7 +168,7 @@ for ticker in imported_list:
             financials[dates[item]]['LT Liab'] = 99
             financials[dates[item]]['Total Liab'] = 99
             financials[dates[item]]['SH Equity'] = 99
-            # Cash Flow Statement
+            # Cash Flow Statement Get
             financials[dates[item]]['CF Operations'] = 99
             financials[dates[item]]['CF Investing'] = 99
             financials[dates[item]]['CF Financing'] = 99
@@ -676,12 +675,6 @@ for ticker in imported_list:
     # fig.show()
     fig.write_image("images/output/equity_uses.png", scale=2)
 
-    # Extracting variable information we will use later
-    ###################################################
-    company_symbol = profile_df.at[0, 'symbol']
-    company_name = profile_df.at[0, 'companyName']
-    company_description = Profile[0]['description']
-
     # Income Statement Dataframe
     ##############################
     # Creating a new dataframe for the PDF Table Output
@@ -737,14 +730,13 @@ for ticker in imported_list:
 
     # Format Columns: Remove decimals, include commas and turn into string.
     is_columns = [
-        'Revenue',
-        'Gross Profit',
-        'Op Expenses',
-        'Op Income',
-        'Net Income',
-        'R&D Expenses',
-        'Interest Expense',
-    ]
+                  'Revenue',
+                  'Gross Profit',
+                  'Op Expenses',
+                  'Op Income',
+                  'Net Income',
+                  'R&D Expenses',
+                  'Interest Expense']
 
     for column_name in is_columns:
         table_is_df[column_name] = pd.Series(
@@ -772,14 +764,13 @@ for ticker in imported_list:
     # Transform the values to Common Size (Percentage of Revenue)
     # Revenue must be the last item on the list
     cs_is_columns = [
-        'Gross Profit',
-        'Op Expenses',
-        'Op Income',
-        'Net Income',
-        'R&D Expenses',
-        'Interest Expense',
-        'Revenue',
-    ]
+                     'Gross Profit',
+                     'Op Expenses',
+                     'Op Income',
+                     'Net Income',
+                     'R&D Expenses',
+                     'Interest Expense',
+                     'Revenue']
 
     # Transform values to percentages
     for column_name in cs_is_columns:
@@ -802,10 +793,9 @@ for ticker in imported_list:
 
     # Save the data as an image:
     dfi.export(
-        table_cs_is_df,
-        'images/output/cs_is_table.png',
-        table_conversion='matplotlib'
-    )
+               table_cs_is_df,
+               'images/output/cs_is_table.png',
+               table_conversion='matplotlib')
 
     # Balance Sheet Dataframe
     # Creating a new dataframe for the PDF Table Output
@@ -849,14 +839,13 @@ for ticker in imported_list:
 
     # Columns to format
     bs_columns = [
-        'Cur Assets',
-        'LT Assets',
-        'Total Assets',
-        'Cur Liab',
-        'LT Liab',
-        'Total Liab',
-        'SH Equity',
-    ]
+                  'Cur Assets',
+                  'LT Assets',
+                  'Total Assets',
+                  'Cur Liab',
+                  'LT Liab',
+                  'Total Liab',
+                  'SH Equity']
 
     # Format Columns: Remove decimals, include commas and turn into string.
     for column_name in bs_columns:
@@ -879,14 +868,13 @@ for ticker in imported_list:
     # Transform the values to Common Size (Percentage of Assets)
     # Total Assets must be the last value in the list
     cs_bs_columns = [
-        'Cur Assets',
-        'LT Assets',
-        'Cur Liab',
-        'LT Liab',
-        'Total Liab',
-        'SH Equity',
-        'Total Assets',
-    ]
+                     'Cur Assets',
+                     'LT Assets',
+                     'Cur Liab',
+                     'LT Liab',
+                     'Total Liab',
+                     'SH Equity',
+                     'Total Assets']
 
     # Transform values to percentages
     for column_name in cs_bs_columns:
@@ -908,8 +896,7 @@ for ticker in imported_list:
     dfi.export(
                table_cs_bs_df,
                'images/output/cs_bs_table.png',
-               table_conversion='matplotlib'
-    )
+               table_conversion='matplotlib')
 
     # Print table name
     print("Common Size Balance Sheet")
@@ -965,13 +952,12 @@ for ticker in imported_list:
 
     # Columns to format
     cf_columns = [
-        'CF Operations',
-        'CF Investing',
-        'CF Financing',
-        'cashAtBeginningOfPeriod',
-        'cashAtEndOfPeriod',
-        'Change in Cash',
-    ]
+                  'CF Operations',
+                  'CF Investing',
+                  'CF Financing',
+                  'cashAtBeginningOfPeriod',
+                  'cashAtEndOfPeriod',
+                  'Change in Cash']
 
     # Format Columns: Remove decimals, include commas and turn into a string.
     for column_name in cf_columns:
@@ -1008,23 +994,22 @@ for ticker in imported_list:
     fundamentals_ratios_filtered_df = pd.DataFrame(
         fundamentals_ratios_df,
         columns=[
-            'Gross Profit Margin',
-            'Op Margin',
-            'Int Coverage',
-            'Net Profit Margin',
-            'Dividend Yield',
-            'Current Ratio',
-            'Operating Cycle',
-            'Days of AP Outstanding',
-            'Cash Conversion Cycle',
-            'ROA',
-            'ROE',
-            'PE',
-            'PS',
-            'PB',
-            'PCF',
-            'EaringsYield',
-        ],
+                 'Gross Profit Margin',
+                 'Op Margin',
+                 'Int Coverage',
+                 'Net Profit Margin',
+                 'Dividend Yield',
+                 'Current Ratio',
+                 'Operating Cycle',
+                 'Days of AP Outstanding',
+                 'Cash Conversion Cycle',
+                 'ROA',
+                 'ROE',
+                 'PE',
+                 'PS',
+                 'PB',
+                 'PCF',
+                 'EaringsYield'],
     )
 
     # Filted the fundamentals_financials_df
@@ -1057,34 +1042,32 @@ for ticker in imported_list:
 
     # Columns to format
     integer_columns = [
-        'Mkt Cap',
-        'PE',
-        'PS',
-        'PB',
-        'PCF',
-        'Int Coverage',
-        'Operating Cycle',
-        'Days of AP Outstanding',
-        'Cash Conversion Cycle',
-        'WA ShsOut',
-        'WA ShsOutDil',
-        'EPS',
-        'CAPEX',
-        'FCF',
-    ]
+                       'Mkt Cap',
+                       'PE',
+                       'PS',
+                       'PB',
+                       'PCF',
+                       'Int Coverage',
+                       'Operating Cycle',
+                       'Days of AP Outstanding',
+                       'Cash Conversion Cycle',
+                       'WA ShsOut',
+                       'WA ShsOutDil',
+                       'EPS',
+                       'CAPEX',
+                       'FCF']
 
     percentage_columns = [
-        'Debt to Assets',
-        'Debt to Equity',
-        'Gross Profit Margin',
-        'Op Margin',
-        'Net Profit Margin',
-        'Dividend Yield',
-        'Current Ratio',
-        'ROA',
-        'ROE',
-        'EaringsYield',
-    ]
+                          'Debt to Assets',
+                          'Debt to Equity',
+                          'Gross Profit Margin',
+                          'Op Margin',
+                          'Net Profit Margin',
+                          'Dividend Yield',
+                          'Current Ratio',
+                          'ROA',
+                          'ROE',
+                          'EaringsYield']
 
     # Format Columns: Remove decimals, include commas and turn into a string.
     for column_name in integer_columns:
@@ -1112,10 +1095,9 @@ for ticker in imported_list:
 
     # Save the data as an image:
     dfi.export(
-        table_metrics_df,
-        'images/output/main_metrics_table.png',
-        table_conversion='matplotlib',
-    )
+                table_metrics_df,
+                'images/output/main_metrics_table.png',
+                table_conversion='matplotlib')
 
     # Print Table Name
     print("Main Metrics")
@@ -1136,22 +1118,21 @@ for ticker in imported_list:
 
     # Create a tuple from the values
     data = (
-        ("Company Name:", company_name),
-        ("Company Symbol:", company_symbol),
-        ("Currency:", currency),
-        ("ISIN:", isin),
-        ("CUSIP:", cusip),
-        ("Exchange:", exchange),
-        ("Industry:", industry),
-        ("Sector:", sector),
-        ("Country:", country),
-        ("No. Employees:", employees),
-        ("IPO Date:", ipo_date),
-        ("CEO:", ceo),
-    )
+            ("Company Name:", company_name),
+            ("Company Symbol:", company_symbol),
+            ("Currency:", currency),
+            ("ISIN:", isin),
+            ("CUSIP:", cusip),
+            ("Exchange:", exchange),
+            ("Industry:", industry),
+            ("Sector:", sector),
+            ("Country:", country),
+            ("No. Employees:", employees),
+            ("IPO Date:", ipo_date),
+            ("CEO:", ceo))
 
     # Defining Classes
-
+    ##################
     class PDF(FPDF):
         def header(self):
             # Logo
@@ -1161,27 +1142,26 @@ for ticker in imported_list:
             self.cell(155)
             self.set_font('Helvetica', 'BI', 8)
             self.cell(
-                w=35,
-                h=5,
-                txt="Created : " + today.strftime("%d-%b-%Y"),
-                border=border_chg,
-                ln=0,
-                align='R',
-                fill=False,
-                link='')
+                      w=35,
+                      h=5,
+                      txt="Created : " + today.strftime("%d-%b-%Y"),
+                      border=border_chg,
+                      ln=0,
+                      align='R',
+                      fill=False,
+                      link='')
             self.ln(4)
             # Company Name
             self.ln(12)
             self.cell(55)
             self.set_font('Helvetica', 'B', 12)
             self.cell(
-                w=100,
-                h=5,
-                txt=(" Company Analysis: " + company_name),
-                border=border_chg,
-                ln=1,
-                align='C',
-            )
+                      w=100,
+                      h=5,
+                      txt=(" Company Analysis: " + company_name),
+                      border=border_chg,
+                      ln=1,
+                      align='C')
 
         def footer(self):
             # Position at 1.5 cm from bottom
@@ -1189,22 +1169,22 @@ for ticker in imported_list:
             # Information Disclaimer
             self.set_font('Helvetica', 'I', 8)
             self.cell(
-                w=0,
-                h=4,
-                txt='*Data provided by Financial Modeling Prep',
-                border=border_chg,
-                ln=1,
-                align='R')
+                      w=0,
+                      h=4,
+                      txt='*Data provided by Financial Modeling Prep',
+                      border=border_chg,
+                      ln=1,
+                      align='R')
             self.ln(1)
             # Page number
             self.set_font('Helvetica', 'BI', 10)
             self.cell(
-                w=0,
-                h=5,
-                txt='Page ' + str(self.page_no()) + ' of {nb}',
-                border=border_chg,
-                ln=0,
-                align='C')
+                      w=0,
+                      h=5,
+                      txt='Page ' + str(self.page_no()) + ' of {nb}',
+                      border=border_chg,
+                      ln=0,
+                      align='C')
     # Instantiation of Class
     pdf = PDF(orientation="P", unit="mm", format="Letter")
     # Document Description
@@ -1245,12 +1225,12 @@ for ticker in imported_list:
         pdf.cell(20)
         for datum in row:
             pdf.multi_cell(
-                col_width,
-                line_height,
-                datum,
-                border=border_chg,
-                ln=3,
-                max_line_height=pdf.font_size)
+                           col_width,
+                           line_height,
+                           datum,
+                           border=border_chg,
+                           ln=3,
+                           max_line_height=pdf.font_size)
         pdf.ln(line_height)
     pdf.ln(5)
     # Company description
@@ -1278,18 +1258,18 @@ for ticker in imported_list:
              border=border_chg,
              ln=1,
              align='L')
-    # Amount in Millions
+    # Amount in Millions text
     pdf.cell(10)
     pdf.set_font('Helvetica', 'I', 8)
     pdf.cell(
-        w=40,
-        h=5,
-        txt=("Amounts in $ "+currency+" (Millions)"),
-        border=border_chg,
-        ln=0,
-        align='L',
-        fill=False,
-        link='')
+             w=40,
+             h=5,
+             txt=("Amounts in $ "+currency+" (Millions)"),
+             border=border_chg,
+             ln=0,
+             align='L',
+             fill=False,
+             link='')
     # Main metrics table
     pdf.image('images/output/main_metrics_table.png', x=40, y=62, h=150)
 
@@ -1300,63 +1280,63 @@ for ticker in imported_list:
     pdf.set_font('Helvetica', 'B', 11)
     pdf.ln(10)
     pdf.cell(
-        w=45,
-        h=5,
-        txt=" Financial statements:",
-        border=border_chg,
-        ln=1,
-        align='L')
-    # Amount in Millions
+             w=45,
+             h=5,
+             txt=" Financial statements:",
+             border=border_chg,
+             ln=1,
+             align='L')
+    # Amount in Millions text
     pdf.cell(10)
     pdf.set_font('Helvetica', 'I', 8)
     pdf.cell(
-        w=40,
-        h=5,
-        txt=("Amounts in $ "+currency+" (Millions)"),
-        border=border_chg,
-        ln=0,
-        align='L',
-        fill=False,
-        link='')
+             w=40,
+             h=5,
+             txt=("Amounts in $ "+currency+" (Millions)"),
+             border=border_chg,
+             ln=0,
+             align='L',
+             fill=False,
+             link='')
     # Income Statement Title
     pdf.ln(15)
     pdf.cell(10)
     pdf.set_font('Helvetica', 'B', 8)
     pdf.cell(
-        w=30,
-        h=5,
-        txt="Income Statement",
-        border=border_chg,
-        ln=0,
-        align='L',
-        fill=False,
-        link='')
+             w=30,
+             h=5,
+             txt="Income Statement",
+             border=border_chg,
+             ln=0,
+             align='L',
+             fill=False,
+             link='')
     # Balance Sheet Title
     pdf.ln(50)
     pdf.cell(10)
     pdf.set_font('Helvetica', 'B', 8)
     pdf.cell(
-        w=25,
-        h=5,
-        txt="Balance Sheet",
-        border=border_chg,
-        ln=0,
-        align='L',
-        fill=False,
-        link='')
+             w=25,
+             h=5,
+             txt="Balance Sheet",
+             border=border_chg,
+             ln=0,
+             align='L',
+             fill=False,
+            link='')
     # Cash Flow Statement Title
     pdf.ln(70)
     pdf.cell(10)
     pdf.set_font('Helvetica', 'B', 8)
     pdf.cell(
-        w=35,
-        h=5,
-        txt="Cash Flow Statement",
-        border=border_chg,
-        ln=0,
-        align='L',
-        fill=False,
-        link='')
+             w=35,
+             h=5,
+             txt="Cash Flow Statement",
+             border=border_chg,
+             ln=0,
+             align='L',
+             fill=False,
+             link='')
     # Income Statement image
     pdf.image('images/output/is_table.png', x=13, y=70, h=40)
     # Common Size Income Statement
@@ -1389,9 +1369,9 @@ for ticker in imported_list:
     pdf.image('images/output/equity_uses.png', x=30, y=175, h=80)
 
     # Save output as PDF
+    ####################
     pdf.output('files/'
                + company_symbol
                + " "
                + today.strftime("%Y-%m-%d")
-               + ".pdf"
-               )
+               + ".pdf")
