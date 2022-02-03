@@ -44,10 +44,12 @@ for ticker in imported_list:
     for path in paths:
         if os.path.exists(path):
             os.remove(path)
-            print(path + " File exists: Removed Successfuly")
+            path = os.path.split(path)
+            print(path[1]+"  --->  File exists: Removed Successfuly")
         else:
-            print(path + " : File does not exist")
-    print("All images removed. \n")
+            path = os.path.split(path)
+            print(path[1]+"  --->  File does not exist")
+    print("\nDone removing images. \n")
 
     # Importing the data
     ####################
