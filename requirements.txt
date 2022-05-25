@@ -1,11 +1,10 @@
 # Libraries used:
-requests==2.26.0
-dataframe_image==0.1.1
-pandas==1.3.2
-fpdf2==2.4.3
-fpdf==1.7.2
-plotly==5.1.0
-Pillow==8.3.2
+requests
+dataframe_image
+pandas
+fpdf2
+plotly
+Pillow
 
 # You must add the following folder structure
 # In the same path as your Jupyter Notebook Script:
