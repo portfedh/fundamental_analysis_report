@@ -36,9 +36,15 @@ To use this script, you must have previously installed:
 - [Dataframe_image](https://pypi.org/project/dataframe-image/)
 - [FPDF2](https://pypi.org/project/fpdf2/)
 - [Pillow](https://pypi.org/project/Pillow/)
+- [Kaleido](https://pypi.org/project/kaleido/)
 
 All modules are available from anaconda and pip. I had 
 some issues using the FPDF2 module from anaconda, and recommend installing from pip.
+
+I also had some issues with Kaleido. For some reason it wont work in a virtual enviroment.
+I had to install in my global enviroment and update this package using:
+
+	pip install -U kaleido
 
 
 You will also need a token from [Financial Modeling Prep](https://financialmodelingprep.com/) 
@@ -49,6 +55,10 @@ They cover NYSE, NASDAQ, AMEX, EURONEX, TSX, INDEXES, ETFs, MUTUAL FUNDS, FOREX 
 
 [Financial Modeling Prep](https://financialmodelingprep.com/) has a free version, which allows for 250 requests per day and covers all the US makets. 
 Paid suscriptions give coverage to the rest of the stocks and an unlimited number of requests. 
+
+The fonts used in the project are FreeSans and FreeSansBold. 
+You can download them from [wfonts](https://www.wfonts.com/font/freesans)
+In a mac, you must add them to 'font book' before running the script.
 
 ## How to Use
 
