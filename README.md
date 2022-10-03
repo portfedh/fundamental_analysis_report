@@ -6,8 +6,9 @@ You can find a more in depth explanation of the script in [this](https://pablocr
 
 ## What it does
 
-The script creates a PDF report showing 5 years of financial history of the company being analyzed.
-Its aim is to serve as a second level stock screener.
+The script creates a PDF report showing 5 years of financial history of the company being analysed.
+
+Its aim is to serve as a second level stock screener. 
 
 The report will output a PDF with the following information:
 
@@ -23,10 +24,6 @@ The report will output a PDF with the following information:
 
 The file `Fundamental_analysis.ipynb` was written using Jupiter Notebook. It can be executed by 
 changing the `company` variable and running all cells.
-
-The file `Fundamental_analysis.py`, is almost the same code written as a python file. When executed, 
-it will read the list in the file `ticker_list.py` and create a report 
-for each company in `list`.
 
 ### How to Install
 
@@ -52,8 +49,9 @@ I had to install in my global environment and update this package using:
 You will also need a token from [Financial Modeling Prep](https://financialmodelingprep.com/) 
 to be able to use the script.
 
-Financial Modeling prep is a stock data provider.
-They cover NYSE, NASDAQ, AMEX, EURONEX, TSX, INDEXES, ETFs, MUTUAL FUNDS, FOREX and CRYPTO.
+Financial Modeling prep is a stock data provider. 
+
+They cover NYSE, NASDAQ, AMEX, EURONEX, TSX, INDEXES, ETFs, MUTUAL FUNDS, FOREX and CRYPTO. 
 
 [Financial Modeling Prep](https://financialmodelingprep.com/) has a free version, which allows for 250 requests per day and covers all the US markets.
 Paid subscriptions give coverage to the rest of the stocks and an unlimited number of requests.
@@ -82,14 +80,7 @@ Paid subscriptions give coverage to the rest of the stocks and an unlimited numb
 1. Write the company ticker in the variable name.
 2. Restart the kernel and run all cells.
 
-#### Python File: *Fundamental_analysis.py*
-
-1. Open `ticker_list.py`.
-2. Write the company tickers in the list named `list = []`.
-3. Save `ticker_list.py`.
-4. Execute `Fundamental_analysis.py`
-
-You can see an example of the output file in the file named [Example_Report.pdf.](https://github.com/portfedh/fundamental_analysis_report/blob/main/Example_Report.pdf)
+You can see an example of the output file in the file named [Example_Report.pdf.](https://github.com/portfedh/fundamental_analysis_report/blob/main/Example_Report.pdf) 
 
 ## Use cases
 
