@@ -1,9 +1,5 @@
 # Fundamental Analysis Report
 
-![Image of a Report](https://pablocruz.io/wp-content/uploads/2022/09/Financial_Report_Main.webp)
-
-You can find a more in depth explanation of the script in [this](https://pablocruz.io/python-financial-report-pdf/) blog post.
-
 ## What it does
 
 The script creates a PDF report showing 5 years of financial history of the company being analysed.
