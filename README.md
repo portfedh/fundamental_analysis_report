@@ -1,10 +1,14 @@
 # Fundamental Analysis Report
 
+![Image of a Report](https://pablocruz.io/wp-content/uploads/2022/09/Financial_Report_Main.webp)
+
+You can find a more in depth explanation of the script in [this](https://pablocruz.io/python-financial-report-pdf/) blog post.
+
 ## What it does
 
 The script creates a PDF report showing 5 years of financial history of the company being analysed.
 
-Its aim is to serve as a second level stock screener. 
+Its aim is to serve as a second level stock screener.
 
 The report will output a PDF with the following information:
 
@@ -18,7 +22,7 @@ The report will output a PDF with the following information:
   - The cash flow statement ($)(%)
   - Profit distribution or reinvestment ($)
 
-The file `Fundamental_analysis.ipynb` was written using Jupiter Notebook. It can be executed by 
+The file `Fundamental_analysis.ipynb` was written using Jupiter Notebook. It can be executed by
 changing the `company` variable and running all cells.
 
 ### How to Install
@@ -34,20 +38,20 @@ To use this script, you must have previously installed:
 - [Pillow](https://pypi.org/project/Pillow/)
 - [Kaleido](https://pypi.org/project/kaleido/)
 
-All modules are available from anaconda and pip. I had 
+All modules are available from anaconda and pip. I had
 some issues using the FPDF2 module from anaconda, and recommend installing from pip.
 
 I also had some issues with Kaleido. For some reason it wont work in a virtual environment.
 I had to install in my global environment and update this package using:
 
-	pip install -U kaleido
+    pip install -U kaleido
 
-You will also need a token from [Financial Modeling Prep](https://financialmodelingprep.com/) 
+You will also need a token from [Financial Modeling Prep](https://financialmodelingprep.com/)
 to be able to use the script.
 
-Financial Modeling prep is a stock data provider. 
+Financial Modeling prep is a stock data provider.
 
-They cover NYSE, NASDAQ, AMEX, EURONEX, TSX, INDEXES, ETFs, MUTUAL FUNDS, FOREX and CRYPTO. 
+They cover NYSE, NASDAQ, AMEX, EURONEX, TSX, INDEXES, ETFs, MUTUAL FUNDS, FOREX and CRYPTO.
 
 [Financial Modeling Prep](https://financialmodelingprep.com/) has a free version, which allows for 250 requests per day and covers all the US markets.
 Paid subscriptions give coverage to the rest of the stocks and an unlimited number of requests.
@@ -66,17 +70,17 @@ Paid subscriptions give coverage to the rest of the stocks and an unlimited numb
 
 1. Inside the "input" folder, add your logo.
    - The current logo is named `BS-Logo.png`.
-   - Current logo is: width 306 pixels,  height 188 pixels.
+   - Current logo is: width 306 pixels, height 188 pixels.
    - When you substitute, make sure to update the filename inside the script or name it `BS-Logo.png` .
 
 ### Running
 
-#### Jupyter Notebook: *Fundamental_analysis.ipynb*
+#### Jupyter Notebook: _Fundamental_analysis.ipynb_
 
 1. Write the company ticker in the variable name.
 2. Restart the kernel and run all cells.
 
-You can see an example of the output file in the file named [Example_Report.pdf.](https://github.com/portfedh/fundamental_analysis_report/blob/main/Example_Report.pdf) 
+You can see an example of the output file in the file named [Example_Report.pdf.](https://github.com/portfedh/fundamental_analysis_report/blob/main/Example_Report.pdf)
 
 ## Use cases
 
