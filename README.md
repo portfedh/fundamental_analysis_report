@@ -4,6 +4,8 @@
 
 You can find a more in depth explanation of the script in [this](https://pablocruz.io/python-financial-report-pdf/) blog post.
 
+Note: The script wil not work if you run it in a file path that has spaces in its name.
+
 ## What it does
 
 The script creates a PDF report showing 5 years of financial history of the company being analysed.
