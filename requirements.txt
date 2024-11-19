@@ -6,13 +6,5 @@ fpdf2
 plotly
 Pillow
 
-# You must add the following folder structure
-# In the same path as your Jupyter Notebook Script:
-
--Fundamental_analysis.ipynb
--images
-    -input
-        -BS-Logo.png
-    -output
 
 
